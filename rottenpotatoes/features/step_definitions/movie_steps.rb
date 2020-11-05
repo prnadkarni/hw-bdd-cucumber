@@ -12,8 +12,22 @@ Then /(.*) seed movies should exist/ do | n_seeds |
   Movie.count.should be n_seeds.to_i
 end
 
+When /^I press the "(.*)" button/ do |button|
+  click_button button
+end
+
 # Make sure that one string (regexp) occurs before or after another one
 #   on the same page
+Then /I should (not )?see the following movies: (.*)$/ do |curr, movies|
+  movies_listed = movies.split(', ')
+  movies_listed.each do |movie|
+    if curr.nil?
+      expect(page).to have_content(movie)
+    else
+      expect(page).not_to have_content(movie)
+    end
+  end
+end
 
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
